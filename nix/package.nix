@@ -12,7 +12,7 @@ pkgs.buildGoModule {
 
   enableParallelBuilding = enableParallelBuilding;
 
-  vendorHash = "sha256-zrWxoPGbFdPaWsjZMFhSkaea0ONAI8636GN+IRI11ZI=";
+  vendorHash = "sha256-w1Aa7x/spXU50EOrxJ5IOrW9Dj1R1Rh2DR+/8Jsw4+E=";
 
   nativeBuildInputs = with pkgs; [
     pkg-config

@@ -9,8 +9,9 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/amadejkastelic/sekiro-tweaker/internal/logger"
 	"go.uber.org/zap"
+
+	"github.com/amadejkastelic/sekiro-tweaker/internal/logger"
 )
 
 type ProcessMemory struct {
@@ -33,6 +34,7 @@ func (pm *ProcessMemory) ReadMemory(address int64, size int) ([]byte, error) {
 		Len:  uint64(size),
 	}
 
+	//nolint // Safe: converting address from remote process memory space
 	remote := syscall.Iovec{
 		Base: (*byte)(unsafe.Pointer(uintptr(address))),
 		Len:  uint64(size),
@@ -67,6 +69,7 @@ func (pm *ProcessMemory) WriteMemory(address int64, data []byte) error {
 		Len:  uint64(size),
 	}
 
+	//nolint // Safe: converting address from remote process memory space
 	remote := syscall.Iovec{
 		Base: (*byte)(unsafe.Pointer(uintptr(address))),
 		Len:  uint64(size),
@@ -99,7 +102,7 @@ func (pm *ProcessMemory) writeMemoryViaProcMem(address int64, data []byte) error
 	if err != nil {
 		return fmt.Errorf("failed to open %s: %v", memPath, err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	_, err = f.Seek(address, 0)
 	if err != nil {
@@ -143,7 +146,7 @@ func (pm *ProcessMemory) ParseMemoryMaps() ([]MemoryRegion, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	var regions []MemoryRegion
 	scanner := bufio.NewScanner(f)

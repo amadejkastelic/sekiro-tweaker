@@ -1,0 +1,27 @@
+version: "2"
+
+linters:
+  enable:
+    - govet
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/amadejkastelic/sekiro-tweaker
+
+linters-settings:
+  govet:
+    enable-all: true
+    disable:
+      - unsafeptr
+
+issues:
+  exclude-rules:
+    - linters:
+        - govet
+      text: "possible misuse of unsafe.Pointer"

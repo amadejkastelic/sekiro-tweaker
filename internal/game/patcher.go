@@ -99,7 +99,7 @@ func (p *Patcher) ApplyResolutionPatch(width, height int) error {
 
 	widescreenAddress, err := p.scanner.FindPattern(PatternResolutionScalingFix)
 	if err == nil {
-		p.mem.WriteMemory(widescreenAddress, PatchResolutionScalingFixEnable)
+		return p.mem.WriteMemory(widescreenAddress, PatchResolutionScalingFixEnable)
 	}
 
 	return nil

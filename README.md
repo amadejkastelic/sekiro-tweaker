@@ -32,21 +32,27 @@ A Linux-native game tweaker for Sekiro: Shadows Die Twice running under Proton/W
 - **Automatic Game Detection**: Finds and attaches to Sekiro automatically
 - **Memory-Safe Patching**: Uses data caves for pointer redirection
 - **Real-time Stats**: Continuous monitoring of player stats (deaths/kills)
+- **Configuration Persistence**: Settings are automatically saved and restored between sessions
 
 ## Building
 
 ```bash
-nix develop
-go build -o sekiro-tweaker ./cmd/sekiro-tweaker
+nix build .#
 ```
 
 ## Running
 
 ```bash
-./sekiro-tweaker
+nix run .#
 ```
 
 The application will automatically detect when Sekiro is running and enable the patch controls.
+
+## Configuration
+
+Settings are automatically saved when you click "Apply Patches" and restored on next launch.
+
+Configuration file location: `~/.config/sekiro-tweaker/config.yaml`
 
 ## How It Works
 
@@ -140,7 +146,3 @@ sekiro-tweaker/
 │       └── patcher.go    # Patch implementations
 └── go.mod
 ```
-
-## License
-
-MIT

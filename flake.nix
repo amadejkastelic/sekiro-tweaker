@@ -24,6 +24,8 @@
       ...
     }:
     let
+      version = "0.0.1";
+
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -71,8 +73,7 @@
           };
 
           package = import ./nix/package.nix {
-            inherit pkgs;
-            version = "0.0.1";
+            inherit pkgs version;
           };
         in
         {
@@ -95,7 +96,6 @@
         checks = {
           x86_64-linux = self.packages.x86_64-linux;
           aarch64-linux = self.packages.aarch64-linux;
-          aarch64-darwin = self.packages.aarch64-darwin;
         };
       };
     };

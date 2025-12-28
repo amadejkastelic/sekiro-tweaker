@@ -23,18 +23,18 @@ const (
 	PatternCameraResetLockOn       = "C6 86 ?? ?? 00 00 ?? F3 0F 10 8E ?? ?? 00 00"
 	PatternCameraResetLockOnOffset = 6
 
-	PatternCameraAdjustPitch         = "0F 29 ?? ?? ?? 00 00 0F 29 ?? ?? ?? 00 00 0F 29 ?? ?? ?? 00 00 EB ?? F3"
+	PatternCameraAdjustPitch          = "0F 29 ?? ?? ?? 00 00 0F 29 ?? ?? ?? 00 00 0F 29 ?? ?? ?? 00 00 EB ?? F3"
 	PatternCameraAdjustPitchOverwrite = 7
 
-	PatternCameraAdjustYawZ         = "E8 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? 00 00 80 ?? ?? ?? 00 00 00 0F 84"
-	PatternCameraAdjustYawZOffset   = 5
+	PatternCameraAdjustYawZ          = "E8 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? 00 00 80 ?? ?? ?? 00 00 00 0F 84"
+	PatternCameraAdjustYawZOffset    = 5
 	PatternCameraAdjustYawZOverwrite = 8
 
-	PatternCameraAdjustPitchXY         = "F3 ?? ?? ?? F3 ?? ?? ?? 70 01 00 00 F3 ?? ?? ?? ?? ?? ?? ?? E8 ?? ?? ?? ?? 0F"
+	PatternCameraAdjustPitchXY          = "F3 ?? ?? ?? F3 ?? ?? ?? 70 01 00 00 F3 ?? ?? ?? ?? ?? ?? ?? E8 ?? ?? ?? ?? 0F"
 	PatternCameraAdjustPitchXYOverwrite = 12
 
-	PatternCameraAdjustYawXY         = "E8 ?? ?? ?? ?? F3 0F 11 86 ?? ?? 00 00 E9"
-	PatternCameraAdjustYawXYOffset   = 5
+	PatternCameraAdjustYawXY          = "E8 ?? ?? ?? ?? F3 0F 11 86 ?? ?? 00 00 E9"
+	PatternCameraAdjustYawXYOffset    = 5
 	PatternCameraAdjustYawXYOverwrite = 8
 
 	PatternAutoLoot       = "C6 85 ?? ?? ?? ?? ?? B0 01 EB ?? C6 85 ?? ?? ?? ?? ?? 32 C0"
@@ -57,23 +57,23 @@ const (
 	PatternGameSpeedInstructionLength   = 7
 	PatternGameSpeedPointerOffsetOffset = 11
 
-	PatternPlayerSpeed                    = "48 8B 1D ?? ?? ?? ?? 48 85 DB 74 ?? 8B ?? 81 FA"
-	PatternPlayerSpeedInstructionLength   = 7
-	PatternPlayerSpeedPointer2Offset      = 0x0088
-	PatternPlayerSpeedPointer3Offset      = 0x1FF8
-	PatternPlayerSpeedPointer4Offset      = 0x0028
-	PatternPlayerSpeedPointer5Offset      = 0x0D00
+	PatternPlayerSpeed                  = "48 8B 1D ?? ?? ?? ?? 48 85 DB 74 ?? 8B ?? 81 FA"
+	PatternPlayerSpeedInstructionLength = 7
+	PatternPlayerSpeedPointer2Offset    = 0x0088
+	PatternPlayerSpeedPointer3Offset    = 0x1FF8
+	PatternPlayerSpeedPointer4Offset    = 0x0028
+	PatternPlayerSpeedPointer5Offset    = 0x0D00
 
-	PatternPlayerDeaths                 = "0F B6 48 ?? 88 8B ?? ?? 00 00 48 8B 05 ?? ?? ?? ?? 8B 88 ?? ?? 00 00 89 8B ?? ?? 00 00 48 8B 05 ?? ?? ?? ?? 8B 88 ?? ?? 00 00"
-	PatternPlayerDeathsOffset           = 29
-	PatternPlayerDeathsInstructionLength = 7
+	PatternPlayerDeaths                    = "0F B6 48 ?? 88 8B ?? ?? 00 00 48 8B 05 ?? ?? ?? ?? 8B 88 ?? ?? 00 00 89 8B ?? ?? 00 00 48 8B 05 ?? ?? ?? ?? 8B 88 ?? ?? 00 00"
+	PatternPlayerDeathsOffset              = 29
+	PatternPlayerDeathsInstructionLength   = 7
 	PatternPlayerDeathsPointerOffsetOffset = 9
 
-	PatternTotalKills                   = "48 ?? D8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 ?? ?? 48 89 ?? ?? ?? 48 8B ?? 08"
-	PatternTotalKillsOffset             = 7
-	PatternTotalKillsInstructionLength  = 7
-	PatternTotalKillsPointer1Offset     = 0x0008
-	PatternTotalKillsPointer2Offset     = 0x00DC
+	PatternTotalKills                  = "48 ?? D8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 ?? ?? 48 89 ?? ?? ?? 48 8B ?? 08"
+	PatternTotalKillsOffset            = 7
+	PatternTotalKillsInstructionLength = 7
+	PatternTotalKillsPointer1Offset    = 0x0008
+	PatternTotalKillsPointer2Offset    = 0x00DC
 )
 
 var (
@@ -117,8 +117,8 @@ var (
 
 	ShellcodeCameraAdjustPitchXY = []byte{
 		0xF3, 0x0F, 0x10, 0x86, 0x70, 0x01, 0x00, 0x00, // movss xmm0,dword ptr ds:[rsi+170]
-		0xF3, 0x0F, 0x11, 0x00,                         // movss dword ptr ds:[rax],xmm0
-		0xF3, 0x0F, 0x10, 0x00,                         // movss xmm0,dword ptr ds:[rax]
+		0xF3, 0x0F, 0x11, 0x00, // movss dword ptr ds:[rax],xmm0
+		0xF3, 0x0F, 0x10, 0x00, // movss xmm0,dword ptr ds:[rax]
 		0xF3, 0x0F, 0x11, 0x86, 0x70, 0x01, 0x00, 0x00, // movss dword ptr ds:[rsi+170],xmm0
 	}
 

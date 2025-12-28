@@ -7,10 +7,10 @@ let
   deps =
     (pkgs.buildGoModule {
       pname = "sekiro-tweaker-modules";
-      version = "0.0.1";
+      version = "dev";
       src = ../.;
       proxyVendor = true;
-      vendorHash = pkgs.lib.fakeHash;
+      vendorHash = "sha256-aCB7rxA3bV5tXwE4eOtRitQh50ZAOnplCMVQvZsqoTY=";
       buildInputs = with pkgs; [
         gtk4
         glib
@@ -28,7 +28,6 @@ preCommitHooks.run {
   src = ../.;
   hooks = {
     nixfmt-rfc-style.enable = true;
-    gofmt.enable = true;
     golangci-lint = {
       enable = true;
       extraPackages = [ goWithProxy ];
@@ -38,10 +37,6 @@ preCommitHooks.run {
       settings.flags = "-m 100 --dry-run";
     };
     gotest = {
-      enable = true;
-      extraPackages = [ goWithProxy ];
-    };
-    govet = {
       enable = true;
       extraPackages = [ goWithProxy ];
     };

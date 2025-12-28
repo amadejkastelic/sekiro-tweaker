@@ -20,13 +20,13 @@ type DataCave struct {
 }
 
 type CodeCave struct {
-	name              string
-	injectionAddress  int64
-	caveAddress       int64
-	shellcode         []byte
-	overwriteLength   int
-	originalBytes     []byte
-	active            bool
+	name             string
+	injectionAddress int64
+	caveAddress      int64
+	shellcode        []byte
+	overwriteLength  int
+	originalBytes    []byte
+	active           bool
 }
 
 type CaveManager struct {
