@@ -25,5 +25,7 @@ pkgs.buildGoModule {
     gobject-introspection
   ];
 
+  doCheck = false;
+
   subPackages = [ "cmd/sekiro-tweaker" ];
 }

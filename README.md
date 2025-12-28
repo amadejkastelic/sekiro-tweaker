@@ -36,16 +36,31 @@ A Linux-native game tweaker for Sekiro: Shadows Die Twice running under Proton/W
 - **Real-time Stats**: Continuous monitoring of player stats (deaths/kills)
 - **Configuration Persistence**: Settings are automatically saved and restored between sessions
 
-## Building
 
-```bash
-nix build .#
+## Cachix
+
+Set up cachix, so you don't have to build the package each time:
+
+```nix
+{
+  nix.settings = {
+    substituters = ["https://amadejkastelic.cachix.org"];
+    trusted-public-keys = ["amadejkastelic.cachix.org-1:EiQfTbiT0UKsynF4q3nbNYjNH6/l7zuhrNkQTuXmyOs="];
+  };
+}
 ```
 
 ## Running
 
 ```bash
-nix run .#
+nix run github:amadejkastelic/sekiro-tweaker --accept-flake-config"
+```
+
+
+## Building
+
+```bash
+nix build .#
 ```
 
 The application will automatically detect when Sekiro is running and enable the patch controls.

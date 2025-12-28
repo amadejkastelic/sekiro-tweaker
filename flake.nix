@@ -1,6 +1,13 @@
 {
   description = "Sekiro Tweaker - Linux game patcher with GTK4 UI";
 
+  nixConfig = {
+    extra-substituters = [ "https://amadejkastelic.cachix.org" ];
+    extra-trusted-public-keys = [
+      "amadejkastelic.cachix.org-1:EiQfTbiT0UKsynF4q3nbNYjNH6/l7zuhrNkQTuXmyOs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
