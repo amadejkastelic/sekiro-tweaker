@@ -1,6 +1,7 @@
 {
   pkgs,
   preCommitHooks,
+  shellHook,
 }:
 
 let
@@ -23,6 +24,10 @@ let
     export GOSUMDB="off"
     exec ${pkgs.go}/bin/go "$@"
   '';
+
+  cgoSetupHook = pkgs.makeSetupHook {
+    name = "cgo-setup-hook";
+  } (pkgs.writeScript "cgo-setup-hook.sh" shellHook);
 in
 preCommitHooks.run {
   src = ../.;
@@ -30,7 +35,14 @@ preCommitHooks.run {
     nixfmt-rfc-style.enable = true;
     golangci-lint = {
       enable = true;
-      extraPackages = [ goWithProxy ];
+      extraPackages = [
+        goWithProxy
+        cgoSetupHook
+        pkgs.pkg-config
+        pkgs.gtk4
+        pkgs.glib
+        pkgs.gobject-introspection
+      ];
     };
     golines = {
       enable = true;
@@ -38,7 +50,10 @@ preCommitHooks.run {
     };
     gotest = {
       enable = true;
-      extraPackages = [ goWithProxy ];
+      extraPackages = [
+        goWithProxy
+        cgoSetupHook
+      ];
     };
   };
 }

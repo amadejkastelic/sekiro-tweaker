@@ -67,8 +67,13 @@
             pkgs.golines
           ];
 
+          shellHook = ''
+            export CGO_ENABLED=1
+            export PKG_CONFIG_PATH="${pkgs.gtk4.dev}/lib/pkgconfig:${pkgs.glib.dev}/lib/pkgconfig"
+          '';
+
           preCommitCheck = import ./nix/pre-commit.nix {
-            inherit pkgs;
+            inherit pkgs shellHook;
             preCommitHooks = pre-commit-hooks.lib.${system};
           };
 
@@ -82,6 +87,7 @@
             inherit pkgs;
             deps = devDeps;
             preCommitCheck = preCommitCheck;
+            extraShellHook = shellHook;
           };
           checks.pre-commit-check = preCommitCheck;
         };
