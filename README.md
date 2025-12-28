@@ -2,6 +2,8 @@
 
 A Linux-native game tweaker for Sekiro: Shadows Die Twice running under Proton/Wine. Written in Go with GTK4.
 
+<img width="628" height="678" alt="image" src="https://github.com/user-attachments/assets/9295f378-c8f9-4f40-ad47-8e8be691b0df" />
+
 ## Features
 
 ### Graphics Settings
