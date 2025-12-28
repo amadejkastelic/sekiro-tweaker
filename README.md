@@ -53,7 +53,7 @@ Set up cachix, so you don't have to build the package each time:
 ## Running
 
 ```bash
-nix run github:amadejkastelic/sekiro-tweaker --accept-flake-config"
+nix run github:amadejkastelic/sekiro-tweaker --accept-flake-config
 ```
 
 
