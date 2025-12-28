@@ -10,5 +10,5 @@ jobs:
   build:
     uses: ./.github/workflows/nix.yaml
     with:
-      command: nix build -L sekiro-tweaker
+      command: nix build .# -L
     secrets: inherit
