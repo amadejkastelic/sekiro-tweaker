@@ -1,6 +1,29 @@
 name: Checks
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'nix/*.nix'
+      - '.github/workflows/*.yaml'
+      - '.github/workflows/*.yml'
+  pull_request:
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'nix/*.nix'
+      - '.github/workflows/*.yaml'
+      - '.github/workflows/*.yml'
+  workflow_dispatch:
 
 jobs:
   check:
@@ -12,8 +35,3 @@ jobs:
     uses: ./.github/workflows/nix.yaml
     with:
       command: ${{ matrix.command }}
-
-  build:
-    needs: check
-    uses: ./.github/workflows/build.yaml
-    secrets: inherit
