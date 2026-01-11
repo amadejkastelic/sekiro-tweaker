@@ -15,19 +15,12 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-github-actions = {
-      url = "github:nix-community/nix-github-actions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     {
-      self,
       nixpkgs,
       pre-commit-hooks,
-      nix-github-actions,
       ...
     }:
     let
@@ -104,12 +97,5 @@
       packages = forAllSystems (system: (perSystem system).packages);
       devShells = forAllSystems (system: (perSystem system).devShells);
       checks = forAllSystems (system: (perSystem system).checks);
-
-      githubActions = nix-github-actions.lib.mkGithubMatrix {
-        checks = {
-          x86_64-linux = self.packages.x86_64-linux;
-          aarch64-linux = self.packages.aarch64-linux;
-        };
-      };
     };
 }
