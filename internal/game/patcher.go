@@ -64,7 +64,12 @@ func (p *Patcher) ApplyFPSPatch(targetFPS int) error {
 	speedFixData := make([]byte, 4)
 	binary.LittleEndian.PutUint32(speedFixData, math.Float32bits(speedFixValue))
 
-	if err := p.caveManager.CreateDataCave("speedfix", speedFixPointer, speedFixData, memory.DWordRelative); err != nil {
+	if err := p.caveManager.CreateDataCave(
+		"speedfix",
+		speedFixPointer,
+		speedFixData,
+		memory.DWordRelative,
+	); err != nil {
 		return fmt.Errorf("failed to create speed fix cave: %v", err)
 	}
 
@@ -83,7 +88,11 @@ func (p *Patcher) ApplyResolutionPatch(width, height int) error {
 
 	address, err := p.scanner.FindPatternInRegion(PatternResolutionDefault, dataAddress, dataSize)
 	if err != nil {
-		address, err = p.scanner.FindPatternInRegion(PatternResolutionDefault720, dataAddress, dataSize)
+		address, err = p.scanner.FindPatternInRegion(
+			PatternResolutionDefault720,
+			dataAddress,
+			dataSize,
+		)
 		if err != nil {
 			return fmt.Errorf("failed to find resolution pattern: %v", err)
 		}
@@ -117,7 +126,12 @@ func (p *Patcher) ApplyFOVPatch(fovDegrees float32) error {
 	fovData := make([]byte, 4)
 	binary.LittleEndian.PutUint32(fovData, math.Float32bits(fovRadians))
 
-	if err := p.caveManager.CreateDataCave("fov", fovPointer, fovData, memory.DWordRelative); err != nil {
+	if err := p.caveManager.CreateDataCave(
+		"fov",
+		fovPointer,
+		fovData,
+		memory.DWordRelative,
+	); err != nil {
 		return fmt.Errorf("failed to create FOV cave: %v", err)
 	}
 
@@ -264,7 +278,10 @@ func (p *Patcher) GetGameSpeedAddress() (int64, error) {
 	}
 
 	// Dereference the static pointer
-	timescaleManager, err := p.mem.DereferenceStaticPointer(refAddress, PatternGameSpeedInstructionLength)
+	timescaleManager, err := p.mem.DereferenceStaticPointer(
+		refAddress,
+		PatternGameSpeedInstructionLength,
+	)
 	if err != nil {
 		return 0, fmt.Errorf("failed to dereference timescale manager: %v", err)
 	}
@@ -304,7 +321,10 @@ func (p *Patcher) GetPlayerSpeedAddress() (int64, error) {
 	}
 
 	// Dereference pointer 1 -> pointer 2
-	lpPlayerStructRelated2, err := p.mem.DereferenceStaticPointer(lpPlayerStructRelated1, PatternPlayerSpeedInstructionLength)
+	lpPlayerStructRelated2, err := p.mem.DereferenceStaticPointer(
+		lpPlayerStructRelated1,
+		PatternPlayerSpeedInstructionLength,
+	)
 	if err != nil {
 		return 0, fmt.Errorf("failed to dereference player struct pointer 1: %v", err)
 	}
@@ -382,7 +402,10 @@ func (p *Patcher) GetPlayerDeathsAddress() (int64, error) {
 	refAddress += PatternPlayerDeathsOffset
 
 	// Dereference the static pointer
-	lpPlayerStatsRelated, err := p.mem.DereferenceStaticPointer(refAddress, PatternPlayerDeathsInstructionLength)
+	lpPlayerStatsRelated, err := p.mem.DereferenceStaticPointer(
+		refAddress,
+		PatternPlayerDeathsInstructionLength,
+	)
 	if err != nil {
 		return 0, fmt.Errorf("failed to dereference player stats: %v", err)
 	}
@@ -413,7 +436,10 @@ func (p *Patcher) GetTotalKillsAddress() (int64, error) {
 	refAddress += PatternTotalKillsOffset
 
 	// Dereference pointer 1
-	lpPlayerStatsRelatedKills1, err := p.mem.DereferenceStaticPointer(refAddress, PatternTotalKillsInstructionLength)
+	lpPlayerStatsRelatedKills1, err := p.mem.DereferenceStaticPointer(
+		refAddress,
+		PatternTotalKillsInstructionLength,
+	)
 	if err != nil {
 		return 0, fmt.Errorf("failed to dereference kills pointer 1: %v", err)
 	}
@@ -474,7 +500,12 @@ func (p *Patcher) ApplyCameraAutoRotatePatch(disable bool) error {
 	// 1. Camera Pitch
 	pitchAddr, err := p.scanner.FindPattern(PatternCameraAdjustPitch)
 	if err == nil {
-		if err := p.caveManager.CreateCodeCave("camera_pitch", pitchAddr, PatternCameraAdjustPitchOverwrite, ShellcodeCameraAdjustPitch); err != nil {
+		if err := p.caveManager.CreateCodeCave(
+			"camera_pitch",
+			pitchAddr,
+			PatternCameraAdjustPitchOverwrite,
+			ShellcodeCameraAdjustPitch,
+		); err != nil {
 			errors = append(errors, fmt.Errorf("create camera_pitch: %v", err))
 		} else {
 			successCount++
@@ -487,7 +518,12 @@ func (p *Patcher) ApplyCameraAutoRotatePatch(disable bool) error {
 	yawZAddr, err := p.scanner.FindPattern(PatternCameraAdjustYawZ)
 	if err == nil {
 		yawZAddr += PatternCameraAdjustYawZOffset
-		if err := p.caveManager.CreateCodeCave("camera_yaw_z", yawZAddr, PatternCameraAdjustYawZOverwrite, ShellcodeCameraAdjustYawZ); err != nil {
+		if err := p.caveManager.CreateCodeCave(
+			"camera_yaw_z",
+			yawZAddr,
+			PatternCameraAdjustYawZOverwrite,
+			ShellcodeCameraAdjustYawZ,
+		); err != nil {
 			errors = append(errors, fmt.Errorf("create camera_yaw_z: %v", err))
 		} else {
 			successCount++
@@ -499,7 +535,12 @@ func (p *Patcher) ApplyCameraAutoRotatePatch(disable bool) error {
 	// 3. Camera Pitch XY
 	pitchXYAddr, err := p.scanner.FindPattern(PatternCameraAdjustPitchXY)
 	if err == nil {
-		if err := p.caveManager.CreateCodeCave("camera_pitch_xy", pitchXYAddr, PatternCameraAdjustPitchXYOverwrite, ShellcodeCameraAdjustPitchXY); err != nil {
+		if err := p.caveManager.CreateCodeCave(
+			"camera_pitch_xy",
+			pitchXYAddr,
+			PatternCameraAdjustPitchXYOverwrite,
+			ShellcodeCameraAdjustPitchXY,
+		); err != nil {
 			errors = append(errors, fmt.Errorf("create camera_pitch_xy: %v", err))
 		} else {
 			successCount++
@@ -512,7 +553,12 @@ func (p *Patcher) ApplyCameraAutoRotatePatch(disable bool) error {
 	yawXYAddr, err := p.scanner.FindPattern(PatternCameraAdjustYawXY)
 	if err == nil {
 		yawXYAddr += PatternCameraAdjustYawXYOffset
-		if err := p.caveManager.CreateCodeCave("camera_yaw_xy", yawXYAddr, PatternCameraAdjustYawXYOverwrite, ShellcodeCameraAdjustYawXY); err != nil {
+		if err := p.caveManager.CreateCodeCave(
+			"camera_yaw_xy",
+			yawXYAddr,
+			PatternCameraAdjustYawXYOverwrite,
+			ShellcodeCameraAdjustYawXY,
+		); err != nil {
 			errors = append(errors, fmt.Errorf("create camera_yaw_xy: %v", err))
 		} else {
 			successCount++
@@ -532,32 +578,48 @@ func (p *Patcher) ApplyCameraAutoRotatePatch(disable bool) error {
 
 	if p.caveManager.CodeCaveExists("camera_pitch") {
 		if err := p.caveManager.ActivateCodeCave("camera_pitch"); err != nil {
-			activationErrors = append(activationErrors, fmt.Errorf("activate camera_pitch: %v", err))
+			activationErrors = append(
+				activationErrors,
+				fmt.Errorf("activate camera_pitch: %v", err),
+			)
 		}
 	}
 
 	if p.caveManager.CodeCaveExists("camera_yaw_z") {
 		if err := p.caveManager.ActivateCodeCave("camera_yaw_z"); err != nil {
-			activationErrors = append(activationErrors, fmt.Errorf("activate camera_yaw_z: %v", err))
+			activationErrors = append(
+				activationErrors,
+				fmt.Errorf("activate camera_yaw_z: %v", err),
+			)
 		}
 	}
 
 	if p.caveManager.CodeCaveExists("camera_pitch_xy") {
 		if err := p.caveManager.ActivateCodeCave("camera_pitch_xy"); err != nil {
-			activationErrors = append(activationErrors, fmt.Errorf("activate camera_pitch_xy: %v", err))
+			activationErrors = append(
+				activationErrors,
+				fmt.Errorf("activate camera_pitch_xy: %v", err),
+			)
 		}
 	}
 
 	if p.caveManager.CodeCaveExists("camera_yaw_xy") {
 		if err := p.caveManager.ActivateCodeCave("camera_yaw_xy"); err != nil {
-			activationErrors = append(activationErrors, fmt.Errorf("activate camera_yaw_xy: %v", err))
+			activationErrors = append(
+				activationErrors,
+				fmt.Errorf("activate camera_yaw_xy: %v", err),
+			)
 		}
 	}
 
 	// Combine all errors for reporting
 	allErrors := append(errors, activationErrors...)
 	if len(allErrors) > 0 {
-		return fmt.Errorf("camera auto-rotate partial success (%d/4 caves): %v", successCount, allErrors)
+		return fmt.Errorf(
+			"camera auto-rotate partial success (%d/4 caves): %v",
+			successCount,
+			allErrors,
+		)
 	}
 
 	return nil

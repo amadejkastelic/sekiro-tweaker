@@ -37,7 +37,11 @@ func (ps *PatternScanner) FindPattern(pattern string) (int64, error) {
 	return ps.findPatternInData(pattern, moduleData, baseAddress)
 }
 
-func (ps *PatternScanner) FindPatternInRegion(pattern string, address int64, size int) (int64, error) {
+func (ps *PatternScanner) FindPatternInRegion(
+	pattern string,
+	address int64,
+	size int,
+) (int64, error) {
 	data, err := ps.memory.ReadMemory(address, size)
 	if err != nil {
 		return -1, err
@@ -46,7 +50,11 @@ func (ps *PatternScanner) FindPatternInRegion(pattern string, address int64, siz
 	return ps.findPatternInData(pattern, data, address)
 }
 
-func (ps *PatternScanner) findPatternInData(pattern string, data []byte, baseAddress int64) (int64, error) {
+func (ps *PatternScanner) findPatternInData(
+	pattern string,
+	data []byte,
+	baseAddress int64,
+) (int64, error) {
 	parts := strings.Split(pattern, " ")
 	var bytes []byte
 	var mask []bool

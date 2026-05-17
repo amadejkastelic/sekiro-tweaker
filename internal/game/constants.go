@@ -142,7 +142,11 @@ func FindSpeedFixForFrameRate(frameRate int) float32 {
 	closestSpeedFix := float32(SpeedFixDefaultValue)
 
 	for _, speedFix := range SpeedFixMatrix {
-		if math.Abs(float64(idealSpeedFix-speedFix)) < math.Abs(float64(idealSpeedFix-closestSpeedFix)) {
+		if math.Abs(
+			float64(idealSpeedFix-speedFix),
+		) < math.Abs(
+			float64(idealSpeedFix-closestSpeedFix),
+		) {
 			closestSpeedFix = speedFix
 		}
 	}

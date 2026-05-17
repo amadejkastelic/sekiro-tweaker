@@ -58,6 +58,7 @@
             pkgs.cairo
             pkgs.pango
             pkgs.gdk-pixbuf
+            pkgs.harfbuzz
           ];
 
           devDeps = buildDeps ++ [
@@ -67,9 +68,26 @@
             pkgs.golines
           ];
 
+          gtk4Deps = pkgs.gtk4.propagatedBuildInputs or [ ];
+          gtk4TransitiveDeps = pkgs.lib.unique (
+            pkgs.lib.concatLists (map (p: p.propagatedBuildInputs or [ ]) gtk4Deps)
+          );
+          pkgConfigPkgs = pkgs.lib.unique (
+            [
+              pkgs.gtk4
+              pkgs.gobject-introspection
+            ]
+            ++ gtk4Deps
+            ++ gtk4TransitiveDeps
+          );
+
           shellHook = ''
             export CGO_ENABLED=1
-            export PKG_CONFIG_PATH="${pkgs.gtk4.dev}/lib/pkgconfig:${pkgs.glib.dev}/lib/pkgconfig"
+            export PKG_CONFIG_PATH="${
+              pkgs.lib.concatStringsSep ":" (
+                map (p: "${p.dev}/lib/pkgconfig") (builtins.filter (p: p ? dev) pkgConfigPkgs)
+              )
+            }"
           '';
 
           preCommitCheck = import ./nix/pre-commit.nix {

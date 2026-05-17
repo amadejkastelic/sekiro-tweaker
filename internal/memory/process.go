@@ -214,7 +214,8 @@ func (pm *ProcessMemory) GetModuleBaseAddress(moduleName string) (int64, error) 
 	}
 
 	for _, region := range regions {
-		if region.Path != "" && strings.Contains(strings.ToLower(region.Path), strings.ToLower(moduleName)) {
+		if region.Path != "" &&
+			strings.Contains(strings.ToLower(region.Path), strings.ToLower(moduleName)) {
 			logger.Log.Info("Found module (contains match)",
 				zap.String("module", moduleName),
 				zap.String("address", fmt.Sprintf("0x%X", region.Start)),
@@ -238,7 +239,8 @@ func (pm *ProcessMemory) GetModuleSize(moduleName string) (int, error) {
 	}
 
 	for _, region := range regions {
-		if region.IsExecutable() && region.Start >= baseAddress && region.Start < baseAddress+0x10000 {
+		if region.IsExecutable() && region.Start >= baseAddress &&
+			region.Start < baseAddress+0x10000 {
 			return int(region.End - baseAddress), nil
 		}
 	}
@@ -389,13 +391,24 @@ func (pm *ProcessMemory) WriteFloat32(address int64, value float32) error {
 
 // DereferenceStaticPointer dereferences a static x64 pointer (RIP-relative addressing)
 // This reads the instruction at instructionAddr and calculates the final address
-func (pm *ProcessMemory) DereferenceStaticPointer(instructionAddr int64, instructionLength int) (int64, error) {
+func (pm *ProcessMemory) DereferenceStaticPointer(
+	instructionAddr int64,
+	instructionLength int,
+) (int64, error) {
 	// Read the 4-byte offset (at instructionAddr + 3 for most mov instructions)
 	offsetData, err := pm.ReadMemory(instructionAddr+3, 4)
 	if err != nil {
 		return 0, err
 	}
-	offset := int32(offsetData[0]) | int32(offsetData[1])<<8 | int32(offsetData[2])<<16 | int32(offsetData[3])<<24
+	offset := int32(
+		offsetData[0],
+	) | int32(
+		offsetData[1],
+	)<<8 | int32(
+		offsetData[2],
+	)<<16 | int32(
+		offsetData[3],
+	)<<24
 
 	// RIP-relative: address = instructionAddr + instructionLength + offset
 	targetAddr := instructionAddr + int64(instructionLength) + int64(offset)

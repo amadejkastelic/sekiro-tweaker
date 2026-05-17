@@ -45,7 +45,12 @@ func NewCaveManager(memory *ProcessMemory, baseAddress int64) *CaveManager {
 	}
 }
 
-func (cm *CaveManager) CreateDataCave(name string, pointerAddress int64, data []byte, pointerStyle PointerStyle) error {
+func (cm *CaveManager) CreateDataCave(
+	name string,
+	pointerAddress int64,
+	data []byte,
+	pointerStyle PointerStyle,
+) error {
 	caveAddress, err := cm.memory.AllocateMemory(pointerAddress, len(data))
 	if err != nil {
 		return fmt.Errorf("failed to allocate memory: %v", err)
@@ -114,7 +119,12 @@ func (cm *CaveManager) DeactivateDataCave(name string) error {
 // injectionAddress: where to place the JMP to cave
 // overwriteLength: how many bytes to overwrite (must be >= 5 for JMP)
 // shellcode: assembly code to execute in the cave
-func (cm *CaveManager) CreateCodeCave(name string, injectionAddress int64, overwriteLength int, shellcode []byte) error {
+func (cm *CaveManager) CreateCodeCave(
+	name string,
+	injectionAddress int64,
+	overwriteLength int,
+	shellcode []byte,
+) error {
 	if overwriteLength < 5 {
 		return fmt.Errorf("overwrite length must be at least 5 bytes for JMP instruction")
 	}
@@ -145,7 +155,9 @@ func (cm *CaveManager) CreateCodeCave(name string, injectionAddress int64, overw
 
 	// Generate JMP back: E9 [offset]
 	returnAddress := injectionAddress + int64(overwriteLength)
-	jmpBackOffset := int32(returnAddress - (caveAddress + int64(len(shellcode)) + int64(overwriteLength) + 5))
+	jmpBackOffset := int32(
+		returnAddress - (caveAddress + int64(len(shellcode)) + int64(overwriteLength) + 5),
+	)
 	caveData = append(caveData, 0xE9) // JMP opcode
 	jmpBackBytes := make([]byte, 4)
 	binary.LittleEndian.PutUint32(jmpBackBytes, uint32(jmpBackOffset))

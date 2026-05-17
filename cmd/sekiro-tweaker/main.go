@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/diamondburned/gotk4/pkg/gio/v2"
-	"github.com/diamondburned/gotk4/pkg/glib/v2"
+	gio "github.com/diamondburned/gotk4/pkg/gio/v2"
+	glib "github.com/diamondburned/gotk4/pkg/glib/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"go.uber.org/zap"
 
@@ -56,7 +56,7 @@ type Application struct {
 }
 
 func main() {
-	app := gtk.NewApplication(appID, gio.ApplicationFlagsNone)
+	app := gtk.NewApplication(appID, gio.ApplicationDefaultFlags)
 	appState := &Application{app: app}
 
 	app.ConnectActivate(func() { appState.activate() })
@@ -197,7 +197,9 @@ func (a *Application) activate() {
 	playerSpeedBox := gtk.NewBox(gtk.OrientationHorizontal, 10)
 	a.playerSpeedCheck = gtk.NewCheckButtonWithLabel("Player Speed (experimental)")
 	a.playerSpeedCheck.SetActive(false)
-	a.playerSpeedCheck.SetTooltipText("May not work reliably on Linux/Proton. Use at your own risk.")
+	a.playerSpeedCheck.SetTooltipText(
+		"May not work reliably on Linux/Proton. Use at your own risk.",
+	)
 	playerSpeedBox.Append(a.playerSpeedCheck)
 	a.playerSpeedSpin = gtk.NewSpinButtonWithRange(0.1, 5.0, 0.1)
 	a.playerSpeedSpin.SetValue(1.0)
@@ -377,15 +379,24 @@ func (a *Application) applyPatches() {
 		if a.gameSpeedCheck.Active() {
 			speed := float32(a.gameSpeedSpin.Value())
 			if err := a.patcher.SetGameSpeed(speed); err != nil {
-				logger.Log.Warn("Failed to set game speed (may not be available yet)", zap.Error(err))
-				errors = append(errors, fmt.Sprintf("Game speed: %v (try again after loading into game)", err))
+				logger.Log.Warn(
+					"Failed to set game speed (may not be available yet)",
+					zap.Error(err),
+				)
+				errors = append(
+					errors,
+					fmt.Sprintf("Game speed: %v (try again after loading into game)", err),
+				)
 			}
 		}
 
 		if a.playerSpeedCheck.Active() {
 			speed := float32(a.playerSpeedSpin.Value())
 			if err := a.patcher.SetPlayerSpeed(speed); err != nil {
-				logger.Log.Warn("Failed to set player speed (may not be available yet)", zap.Error(err))
+				logger.Log.Warn(
+					"Failed to set player speed (may not be available yet)",
+					zap.Error(err),
+				)
 				errors = append(errors, "Player speed: not available (load into game first)")
 			}
 		}
@@ -404,7 +415,10 @@ func (a *Application) applyPatches() {
 				a.errorsExpander.SetVisible(true)
 				a.errorsExpander.SetExpanded(true)
 
-				logger.Log.Warn("Patches completed with errors", zap.Int("error_count", len(errors)))
+				logger.Log.Warn(
+					"Patches completed with errors",
+					zap.Int("error_count", len(errors)),
+				)
 			} else {
 				a.statusLabel.SetText("Patches applied successfully!")
 				a.errorsExpander.SetVisible(false)
